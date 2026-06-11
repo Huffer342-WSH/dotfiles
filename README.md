@@ -47,6 +47,22 @@ cd dotfiles
 > 如果某个模块已经配置过, 会跳过已存在的配置文件。如需覆盖, 加 `-f`:
 > `.\install.ps1 -m starship -f`
 
+### 在线运行 (不克隆)
+
+无需下载仓库, 子模块脚本可直接从 raw URL 运行:
+
+```powershell
+# 直接运行单个模块
+irm https://raw.githubusercontent.com/Huffer342-WSH/dotfiles/refs/heads/windows/modules/powershell/powershell.ps1 | iex
+irm https://raw.githubusercontent.com/Huffer342-WSH/dotfiles/refs/heads/windows/modules/starship/starship.ps1 | iex
+
+# 带参数运行
+$script = irm https://raw.githubusercontent.com/Huffer342-WSH/dotfiles/refs/heads/windows/modules/powershell/powershell.ps1
+iex "$script -Force -Source Remote"
+```
+
+> 通过管道 `|` 传递给 `iex` (Invoke-Expression) 时无法传递参数。如需参数, 先用变量保存脚本内容再执行, 如上面最后两行所示。
+
 ### 单独安装
 
 也可以直接运行各模块脚本:

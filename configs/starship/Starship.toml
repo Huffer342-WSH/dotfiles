@@ -1,0 +1,28 @@
+# 根据 schema 提供自动补全
+"$schema" = 'https://Starship.rs/config-schema.json'
+
+# 在提示符之间插入空行
+add_newline = true
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$python\
+$conda\
+\n$character\
+"""
+
+[directory]
+truncation_length = 8
+truncate_to_repo = false
+truncation_symbol = '…/'
+use_os_path_sep = false
+
+[python]
+symbol = ' '
+pyenv_version_name = false
+
+[conda]
+format = '[\($environment\)]($style)'
+style = 'yellow'

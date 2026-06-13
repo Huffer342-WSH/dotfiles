@@ -1,5 +1,4 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-
+$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
 $IsInteractiveConsole =
     $Host.Name -eq 'ConsoleHost' -and
@@ -7,20 +6,18 @@ $IsInteractiveConsole =
     -not [Console]::IsOutputRedirected
 
 if ($IsInteractiveConsole) {
-    # posh-git
-    Import-Module posh-git
-
     # PSReadLine
     Import-Module PSReadLine
-    Import-Module CompletionPredictor
-    Set-PSReadLineOption -EditMode Emacs
-    Set-PSReadLineOption -PredictionViewStyle InlineView
-    Set-PSReadLineOption -PredictionSource Plugin
+
+    Set-PSReadLineOption -EditMode Emacs -PredictionViewStyle InlineView -PredictionSource HistoryAndPlugin -Colors @{ InlinePrediction = "`e[2;38;5;8m" }
     Set-PSReadLineKeyHandler -Chord Ctrl+v -Function Paste
     Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 
+    Import-Module PSCompletions
+    Import-Module CompletionPredictor
+
     # carapace 自动补全  winget install -e --id rsteube.Carapace
-    $env:CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
+    $env:CARAPACE_TOOLTIP = 1
     carapace _carapace | Out-String | Invoke-Expression
 
     # Starship - 美化Prompt

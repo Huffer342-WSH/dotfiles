@@ -216,10 +216,16 @@ function Deploy-File {
 # ==========================================
 Write-Host "`n[1/5] 安装 PowerShell 模块..." -ForegroundColor Green
 
-$requiredModules = @("PSReadLine", "posh-git", "CompletionPredictor")
+$requiredModules = @("PSReadLine", "PSCompletions", "CompletionPredictor")
 foreach ($module in $requiredModules) {
     Install-PowerShellModule -Name $module
 }
+
+# 配置 PSCompletions
+import-Module PSCompletions
+psc config enable_completions_update 0
+psc menu config enable_enter_when_single 1
+psc add git python
 
 # ==========================================
 # 3. 安装 Starship

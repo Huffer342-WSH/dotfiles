@@ -164,6 +164,55 @@ function Install-WingetPackage {
     }
 }
 
+function Get-FontDownloadUrls {
+    <#
+    .SYNOPSIS
+        查询字体最新版本的下载 URL
+    #>
+    $Fonts = @(
+        @{
+            Name = "SarasaMonoSC"
+            Repo = "be5invis/Sarasa-Gothic"
+            AssetPattern = "^SarasaMonoSC-TTF-.*\.7z$"
+        },
+        @{
+            Name = "CascadiaCode"
+            Repo = "microsoft/cascadia-code"
+            AssetPattern = "^CascadiaCode-.*\.zip$"
+        }
+    )
+
+    $Headers = @{
+        "User-Agent" = "PowerShell"
+    }
+
+    $result = foreach ($font in $Fonts) {
+        try {
+            $release = Invoke-RestMethod `
+                -Uri "https://api.github.com/repos/$($font.Repo)/releases/latest" `
+                -Headers $Headers
+
+            $asset = $release.assets |
+                Where-Object { $_.name -match $font.AssetPattern } |
+                Select-Object -First 1
+
+            if ($asset) {
+                [PSCustomObject]@{
+                    Name        = $font.Name
+                    Version     = $release.tag_name
+                    FileName    = $asset.name
+                    DownloadUrl = $asset.browser_download_url
+                }
+            }
+        }
+        catch {
+            Write-Warning "获取 $($font.Name) 最新版本失败: $_"
+        }
+    }
+
+    return $result
+}
+
 function Deploy-File {
     <#
     .SYNOPSIS
@@ -280,8 +329,14 @@ Write-Host "    - 主题:   $starshipTarget"
 Write-Host ""
 Write-Host "  后续手动操作：" -ForegroundColor Yellow
 Write-Host "  1. 安装 Nerd 字体 (解决图标乱码)"
-Write-Host "     推荐: CaskaydiaCove Nerd Font"
-Write-Host "     下载: https://www.nerdfonts.com/font-downloads"
+Write-Host "     推荐: Cascadia Mono NF + Sarasa Mono SC (英文 Cascadia, 中文更纱黑体)" -ForegroundColor Gray
+Write-Host ""
+Write-Host "     获取最新版下载链接:" -ForegroundColor Cyan
+$fontUrls = Get-FontDownloadUrls
+foreach ($f in $fontUrls) {
+    Write-Host "     - $($f.Name) ($($f.Version))"
+    Write-Host "       $($f.DownloadUrl)"
+}
 Write-Host ""
 Write-Host "  2. 在终端中设置字体为 Nerd Font"
 Write-Host "     (Windows Terminal / VS Code 内均需设置)"

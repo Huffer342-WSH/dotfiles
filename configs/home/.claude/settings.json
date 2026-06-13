@@ -1,0 +1,15 @@
+{
+    "env": {
+        "ANTHROPIC_BASE_URL": "https://api.deepseek.com/anthropic",
+        "ANTHROPIC_AUTH_TOKEN": "https://platform.deepseek.com/api_keys 生成API 密钥",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek-v4-pro[1m]",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro[1m]",
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-flash",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "deepseek-v4-flash",
+        "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true",
+        "CLAUDE_CODE_NATIVE_CURSOR": "1"
+    },
+    "model": "haiku",
+    "effortLevel": "medium",
+    "theme": "auto"
+}

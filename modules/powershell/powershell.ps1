@@ -18,8 +18,14 @@ param(
     [ValidateSet("Auto", "Local", "Remote")]
     [string]$Source = "Auto",
 
+    [Alias("f")]
     [switch]$Force
 )
+
+# 支持 --force (跨平台风格参数名, 通过命令行原文解析)
+if ($MyInvocation.Line -split '\s+' -contains '--force') {
+    $Force = $true
+}
 
 # ==========================================
 # 常量
@@ -270,12 +276,6 @@ foreach ($module in $requiredModules) {
     Install-PowerShellModule -Name $module
 }
 
-# 配置 PSCompletions
-import-Module PSCompletions
-psc config enable_completions_update 0
-psc menu config enable_enter_when_single 1
-psc add git python
-
 # ==========================================
 # 3. 安装 Starship
 # ==========================================
@@ -315,6 +315,35 @@ Deploy-File `
     -RelativeSourcePath "configs/starship/Starship.toml" `
     -TargetPath $starshipTarget `
     -Description "Starship 主题"
+
+# --- PSCompletions 配置 ---
+try {
+    $pscModule = Get-Module -ListAvailable -Name PSCompletions |
+        Sort-Object Version -Descending |
+        Select-Object -First 1
+
+    if ($pscModule) {
+        $pscConfigTarget = Join-Path $pscModule.ModuleBase "data.json"
+        Write-Host "`n部署 PSCompletions 配置 ..." -ForegroundColor Green
+        Write-Host "  目标: $pscConfigTarget" -ForegroundColor DarkGray
+        if ((Test-Path $pscConfigTarget) -and -not $Force) {
+            Write-Host "  目标已存在，跳过 (使用 -Force 强制覆盖)。" -ForegroundColor Yellow
+        }
+        else {
+            if (Test-Path $pscConfigTarget) {
+                $backupPath = "$pscConfigTarget.backup.$(Get-Date -Format 'yyyyMMddHHmmss')"
+                Copy-Item $pscConfigTarget $backupPath
+                Write-Host "  已备份至: $backupPath" -ForegroundColor Gray
+            }
+            $content = Get-ConfigContent -RelativePath "configs/powershell/pscompletions_data.json"
+            Set-Content -Path $pscConfigTarget -Value $content -Encoding UTF8 -Force
+            Write-Host "  PSCompletions 配置已部署。" -ForegroundColor Cyan
+        }
+    }
+}
+catch {
+    Write-Warning "PSCompletions 配置部署失败: $_"
+}
 
 # ==========================================
 # 6. 收尾

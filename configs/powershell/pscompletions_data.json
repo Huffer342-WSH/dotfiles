@@ -1,0 +1,81 @@
+{
+  "list": [
+    "psc",
+    "git",
+    "python"
+  ],
+  "alias": {
+    "psc": [
+      "psc"
+    ],
+    "git": [
+      "git"
+    ],
+    "python": [
+      "python"
+    ]
+  },
+  "aliasMap": {
+    "psc": "psc",
+    "git": "git",
+    "python": "python"
+  },
+  "config": {
+    "url": "",
+    "language": "zh-CN",
+    "enable_auto_alias_setup": 1,
+    "enable_completions_update": 0,
+    "enable_module_update": 1,
+    "enable_cache": 1,
+    "SpaceTab": "~",
+    "OptionTab": "?",
+    "WriteSpaceTab": "!",
+    "horizontal": "─",
+    "vertical": "│",
+    "top_left": "╭",
+    "bottom_left": "╰",
+    "top_right": "╮",
+    "bottom_right": "╯",
+    "filter_color": "Yellow",
+    "border_color": "DarkGray",
+    "item_color": "Blue",
+    "status_color": "Blue",
+    "tip_color": "Cyan",
+    "selected_color": "White",
+    "selected_bgcolor": "DarkGray",
+    "trigger_key": "Tab",
+    "filter_symbol": "[]",
+    "status_symbol": "/",
+    "between_item_and_symbol": " ",
+    "height_from_menu_bottom_to_cursor_when_above": 0,
+    "height_from_menu_top_to_cursor_when_below": 0,
+    "enable_menu": 1,
+    "enable_menu_enhance": 1,
+    "enable_menu_show_below": 0,
+    "enable_enter_when_single": 1,
+    "enable_list_loop": 1,
+    "enable_list_full_width": 1,
+    "enable_list_follow_cursor": 1,
+    "enable_tip": 1,
+    "enable_hooks_tip": 1,
+    "enable_tip_when_enhance": 1,
+    "enable_tip_follow_cursor": 1,
+    "enable_completions_sort": 1,
+    "enable_path_with_trailing_separator": 1,
+    "list_min_width": 10,
+    "list_max_count_when_above": 0,
+    "list_max_count_when_below": 0,
+    "completion_suffix": " ",
+    "completions_confirm_limit": 0,
+    "comp_config": {
+      "psc": {
+        "enable_hooks": 1
+      },
+      "git": {
+        "max_commit": 100,
+        "enable_hooks": 1
+      },
+      "python": {}
+    }
+  }
+}

@@ -16,8 +16,14 @@ param(
     [ValidateSet("Auto", "Local", "Remote")]
     [string]$Source = "Auto",
 
+    [Alias("f")]
     [switch]$Force
 )
+
+# 支持 --force (跨平台风格参数名)
+if ($MyInvocation.Line -split '\s+' -contains '--force') {
+    $Force = $true
+}
 
 # ==========================================
 # 常量

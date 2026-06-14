@@ -31,6 +31,11 @@ param(
     [switch]$Help
 )
 
+# 支持 --force (跨平台风格参数名)
+if ($MyInvocation.Line -split '\s+' -contains '--force') {
+    $Force = $true
+}
+
 $basePath   = Split-Path -Parent $MyInvocation.MyCommand.Path
 $modulePath = Join-Path $basePath "modules"
 

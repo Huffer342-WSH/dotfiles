@@ -1,11 +1,27 @@
 $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
-$IsInteractiveConsole =
+# 设置代理
+$key = Get-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -ErrorAction SilentlyContinue
+if ($key.ProxyEnable -eq 1) {
+    $server = $key.ProxyServer
+
+    if ($server) {
+        $url = if ($server -like "http://*") { $server } else { "http://$server" }
+        $env:HTTP_PROXY = $env:HTTPS_PROXY = $url
+    }
+}
+
+$IsInteractive =
     $Host.Name -eq 'ConsoleHost' -and
     -not [Console]::IsInputRedirected -and
-    -not [Console]::IsOutputRedirected
+    -not [Console]::IsOutputRedirected -and
+    -not (
+        $args -contains '-Command' -or
+        $args -contains '-EncodedCommand' -or
+        $args -contains '-File'
+    )
 
-if ($IsInteractiveConsole) {
+if ($IsInteractive) {
     # PSReadLine
     Import-Module PSReadLine
 
@@ -23,18 +39,5 @@ if ($IsInteractiveConsole) {
     # Starship - 美化Prompt
     if (Get-Command starship -ErrorAction SilentlyContinue) {
         Invoke-Expression (& starship init powershell)
-    }
-}
-
-# 设置代理
-$reg = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings")
-$proxyEnable = $reg.GetValue("ProxyEnable")
-$server = $reg.GetValue("ProxyServer")
-
-if ($proxyEnable -eq 1) {
-    $server = $reg.GetValue("ProxyServer")
-    if ($server) {
-        $url = if ($server -like "http://*") { $server } else { "http://$server" }
-        $env:HTTP_PROXY = $env:HTTPS_PROXY = $url
     }
 }

@@ -1,0 +1,29 @@
+# 雾凇拼音 + 万象语法模型 + 模糊音 + 自定义按键
+patch:
+  # 万象 Gram（参数来自雾凇官方 grammar recipe）
+  grammar:
+    language: wanxiang-lts-zh-hans
+    collocation_max_length: 6
+    collocation_min_length: 3
+    collocation_penalty: -14
+    non_collocation_penalty: -6
+    weak_collocation_penalty: -100
+    rear_penalty: -20
+  translator/contextual_suggestions: false
+  translator/max_homophones: 8
+
+  # 模糊音：不区分 en/eng、in/ing
+  "speller/algebra/+":
+    - derive/eng$/en/
+    - derive/en$/eng/
+    - derive/ing$/in/
+    - derive/in$/ing/
+
+  # [ 取当前候选的首字，] 取当前候选的末字
+  key_binder/select_first_character: bracketleft
+  key_binder/select_last_character: bracketright
+
+  # , 上一页；. 下一页
+  "key_binder/bindings/+":
+    - { when: has_menu, accept: comma, send: Page_Up }
+    - { when: has_menu, accept: period, send: Page_Down }

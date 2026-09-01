@@ -1,0 +1,5 @@
+# 仅启用雾凇拼音（全拼）
+patch:
+  schema_list:
+    - schema: rime_ice
+  menu/page_size: 8

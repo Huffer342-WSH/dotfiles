@@ -25,3 +25,19 @@ chsh -s "$(command -v zsh)"
 配置脚本默认尝试安装 `fzf` 和 `eza`，以还原模糊补全和文件列表显示。如果当前系统无法安装这些命令，配置流程不会中断：缺少 `fzf` 时不启用 `fzf-tab`，缺少 `eza` 时使用系统自带的 `ls`。
 
 运行 `bash modules/zsh/install-zsh.sh --help` 可以查看配置选项。
+
+## 安装 Rime 输入法
+
+Rime 脚本通过 [rime-ready](https://github.com/Huffer342-WSH/rime-ready) 安装 Fcitx5、Rime、雾凇拼音和万象 Gram，再把仓库中的个人配置复制到 Rime 用户目录并重新部署：
+
+```bash
+bash modules/rime/install-rime.sh
+```
+
+从网络直接运行时，脚本会自动下载本仓库的 Rime 配置：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Huffer342-WSH/dotfiles/refs/heads/linux/modules/rime/install-rime.sh | bash
+```
+
+脚本必须由普通桌面用户运行，不要使用 `sudo`。可以用 `--install-only` 只安装输入法，或用 `--config-only` 只复制配置。运行 `bash modules/rime/install-rime.sh --help` 可查看全部选项。
